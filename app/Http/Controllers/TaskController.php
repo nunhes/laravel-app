@@ -23,18 +23,30 @@ class TaskController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Project $project)
     {
-        //
+        return view('tasks.create', compact('project'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
+    public function store(Request $request, Project $project)
+{
+    $validated = $request->validate([
+        'title' => ['required', 'string', 'max:255'],
+        'description' => ['nullable', 'string'],
+        'status' => ['required', 'string', 'in:pending,in_progress,completed'],
+        'priority' => ['required', 'string', 'in:low,medium,high'],
+        'due_date' => ['nullable', 'date'],
+    ]);
+
+    $project->tasks()->create($validated);
+
+    return redirect()
+        ->route('projects.tasks.index', $project)
+        ->with('success', 'Tarefa creada correctamente.');
+}
 
     /**
      * Display the specified resource.
