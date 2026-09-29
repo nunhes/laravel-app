@@ -1,5 +1,7 @@
 <?php
 
+/* só para probas de funcionamento da BBDDD */
+
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;

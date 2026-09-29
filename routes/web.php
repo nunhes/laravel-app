@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\DatabaseTestController;
+// use App\Http\Controllers\DatabaseTestController;  -> só para probas
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/database-test', [DatabaseTestController::class, 'index']);
+/* ruta só para test de funcionamento */
+// Route::get('/database-test', [DatabaseTestController::class, 'index']);
 
