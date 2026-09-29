@@ -59,18 +59,30 @@ class TaskController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Task $task)
+    public function edit(Project $project, Task $task)
     {
-        //
+        return view('tasks.edit', compact('project', 'task'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Task $task)
-    {
-        //
-    }
+    public function update(Request $request, Project $project, Task $task)
+{
+    $validated = $request->validate([
+        'title' => ['required', 'string', 'max:255'],
+        'description' => ['nullable', 'string'],
+        'status' => ['required', 'string', 'in:pending,in_progress,completed'],
+        'priority' => ['required', 'string', 'in:low,medium,high'],
+        'due_date' => ['nullable', 'date'],
+    ]);
+
+    $task->update($validated);
+
+    return redirect()
+        ->route('projects.tasks.index', $project)
+        ->with('success', 'Tarefa actualizada correctamente.');
+}
 
     /**
      * Remove the specified resource from storage.
