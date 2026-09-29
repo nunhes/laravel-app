@@ -1,24 +1,9 @@
-<!DOCTYPE html>
-<html lang="gl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear proxecto</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Crear proxecto')
+
+@section('content')
     <h1>Crear proxecto</h1>
-
-    @if ($errors->any())
-        <div>
-            <strong>Hai erros no formulario:</strong>
-
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
 
     <form method="POST" action="{{ route('projects.store') }}">
         @csrf
@@ -49,5 +34,4 @@
     <p>
         <a href="{{ route('projects.index') }}">Volver aos proxectos</a>
     </p>
-</body>
-</html>
+@endsection

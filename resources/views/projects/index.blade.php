@@ -1,12 +1,15 @@
-<!DOCTYPE html>
-<html lang="gl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proxectos</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Proxectos')
+
+@section('content')
     <h1>Proxectos</h1>
+
+    <p>
+        <a href="{{ route('projects.create') }}">
+            Crear proxecto
+        </a>
+    </p>
 
     @if ($projects->isEmpty())
         <p>Aínda non hai proxectos.</p>
@@ -14,7 +17,12 @@
         <ul>
             @foreach ($projects as $project)
                 <li>
-                    <strong>{{ $project->name }}</strong>
+                    <strong>
+                        <a href="{{ route('projects.show', $project) }}">
+                            {{ $project->name }}
+                        </a>
+                    </strong>
+
                     — {{ $project->tasks_count }} tarefas
 
                     @if ($project->description)
@@ -24,5 +32,4 @@
             @endforeach
         </ul>
     @endif
-</body>
-</html>
+@endsection

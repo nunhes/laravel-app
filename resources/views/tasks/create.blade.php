@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="gl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nova tarefa — {{ $project->name }}</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Nova tarefa — ' . $project->name)
+
+@section('content')
     <p>
         <a href="{{ route('projects.tasks.index', $project) }}">
             ← Volver ás tarefas
@@ -14,19 +11,9 @@
 
     <h1>Nova tarefa</h1>
 
-    <p>Proxecto: <strong>{{ $project->name }}</strong></p>
-
-    @if ($errors->any())
-        <div>
-            <strong>Hai erros no formulario:</strong>
-
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <p>
+        Proxecto: <strong>{{ $project->name }}</strong>
+    </p>
 
     <form method="POST" action="{{ route('projects.tasks.store', $project) }}">
         @csrf
@@ -93,5 +80,4 @@
 
         <button type="submit">Crear tarefa</button>
     </form>
-</body>
-</html>
+@endsection

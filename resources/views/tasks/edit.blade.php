@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="gl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar tarefa — {{ $project->name }}</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('title', 'Editar tarefa — ' . $project->name)
+
+@section('content')
     <p>
         <a href="{{ route('projects.tasks.index', $project) }}">
             ← Volver ás tarefas
@@ -14,19 +11,9 @@
 
     <h1>Editar tarefa</h1>
 
-    <p>Proxecto: <strong>{{ $project->name }}</strong></p>
-
-    @if ($errors->any())
-        <div>
-            <strong>Hai erros no formulario:</strong>
-
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <p>
+        Proxecto: <strong>{{ $project->name }}</strong>
+    </p>
 
     <form method="POST" action="{{ route('projects.tasks.update', [$project, $task]) }}">
         @csrf
@@ -94,5 +81,4 @@
 
         <button type="submit">Gardar cambios</button>
     </form>
-</body>
-</html>
+@endsection
