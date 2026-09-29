@@ -59,7 +59,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        return view('projects.edit', compact('project'));
     }
 
     /**
@@ -67,7 +67,16 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
-        //
+            $validated = $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'description' => ['nullable', 'string'],
+    ]);
+
+    $project->update($validated);
+
+    return redirect()
+        ->route('projects.show', $project)
+        ->with('success', 'Proxecto actualizado correctamente.');
     }
 
     /**
