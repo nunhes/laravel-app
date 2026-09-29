@@ -87,8 +87,12 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Task $task)
-    {
-        //
-    }
+    public function destroy(Project $project, Task $task)
+{
+    $task->delete();
+
+    return redirect()
+        ->route('projects.tasks.index', $project)
+        ->with('success', 'Tarefa eliminada correctamente.');
+}
 }
