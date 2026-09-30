@@ -5,15 +5,37 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TaskController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Project $project)
+public function index(Request $request, Project $project)
 {
+    $validated = $request->validate([
+        'status' => ['nullable', Rule::in([
+            'pending',
+            'in_progress',
+            'completed',
+        ])],
+        'priority' => ['nullable', Rule::in([
+            'low',
+            'medium',
+            'high',
+        ])],
+    ]);
+
     $tasks = $project->tasks()
+        ->when(
+            isset($validated['status']),
+            fn ($query) => $query->where('status', $validated['status'])
+        )
+        ->when(
+            isset($validated['priority']),
+            fn ($query) => $query->where('priority', $validated['priority'])
+        )
         ->latest()
         ->get();
 

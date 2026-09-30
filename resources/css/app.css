@@ -3,7 +3,55 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+@layer base {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: inherit;
+    }
+
+    a {
+        color: inherit;
+    }
+}
+
+@layer components {
+    .form-label {
+        @apply mb-1 block text-sm font-medium text-gray-700 dark:text-gray-200;
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+        @apply block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm outline-none transition;
+        @apply placeholder:text-gray-400;
+        @apply focus:border-gray-500 focus:ring-2 focus:ring-gray-300;
+        @apply dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500;
+        @apply dark:focus:border-gray-500 dark:focus:ring-gray-700;
+    }
+
+    .form-textarea {
+        @apply resize-y;
+    }
+
+    .form-button {
+    	@apply inline-flex items-center justify-center rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white transition;
+    	@apply hover:bg-gray-700;
+    	@apply dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200;
+    }
+
+    .form-button-danger {
+    	@apply inline-flex items-center justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white transition;
+    	@apply hover:bg-red-700;
+    }
 }

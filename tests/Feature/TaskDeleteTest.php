@@ -2,11 +2,14 @@
 
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
 it('deletes a task from a project', function () {
+    $user = User::factory()->create();
+
     $project = Project::create([
         'name' => 'Proxecto de eliminación',
     ]);
@@ -15,7 +18,7 @@ it('deletes a task from a project', function () {
         'title' => 'Tarefa para eliminar',
     ]);
 
-    $response = $this->delete(
+    $response = $this->actingAs($user)->delete(
         route('projects.tasks.destroy', [$project, $task])
     );
 
@@ -28,6 +31,8 @@ it('deletes a task from a project', function () {
 });
 
 it('cannot delete a task belonging to another project', function () {
+    $user = User::factory()->create();
+
     $project = Project::create([
         'name' => 'Proxecto correcto',
     ]);
@@ -40,7 +45,7 @@ it('cannot delete a task belonging to another project', function () {
         'title' => 'Tarefa doutro proxecto',
     ]);
 
-    $response = $this->delete(
+    $response = $this->actingAs($user)->delete(
         route('projects.tasks.destroy', [$project, $task])
     );
 

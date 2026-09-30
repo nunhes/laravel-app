@@ -5,36 +5,47 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-it('displays a project and its tasks', function () {
+it('displays an existing project without tasks', function () {
     $project = Project::create([
-        'name' => 'Proxecto de detalle',
+        'name' => 'Proxecto de exemplo',
         'description' => 'Descrición do proxecto.',
-    ]);
-
-    $project->tasks()->create([
-        'title' => 'Primeira tarefa',
-        'status' => 'pending',
-        'priority' => 'high',
-    ]);
-
-    $project->tasks()->create([
-        'title' => 'Segunda tarefa',
-        'status' => 'in_progress',
-        'priority' => 'medium',
     ]);
 
     $response = $this->get(route('projects.show', $project));
 
     $response->assertOk()
-        ->assertSee('Proxecto de detalle')
+        ->assertSee('Proxecto de exemplo')
         ->assertSee('Descrición do proxecto.')
-        ->assertSee('Primeira tarefa')
-        ->assertSee('Segunda tarefa')
-        ->assertSee('pending')
-        ->assertSee('in_progress');
+        ->assertSee('Tarefas')
+        ->assertSee('Este proxecto aínda non ten tarefas.')
+        ->assertSee('Crear tarefa');
 });
 
-it('returns not found for a missing project', function () {
+it('displays an existing project with its tasks', function () {
+    $project = Project::create([
+        'name' => 'Proxecto con tarefas',
+        'description' => 'Proxecto para probar as tarefas.',
+    ]);
+
+    $project->tasks()->create([
+        'title' => 'Primeira tarefa',
+    ]);
+
+    $project->tasks()->create([
+        'title' => 'Segunda tarefa',
+    ]);
+
+    $response = $this->get(route('projects.show', $project));
+
+    $response->assertOk()
+        ->assertSee('Proxecto con tarefas')
+        ->assertSee('Proxecto para probar as tarefas.')
+        ->assertSee('Primeira tarefa')
+        ->assertSee('Segunda tarefa')
+        ->assertSee('Tarefas');
+});
+
+it('returns not found for a project that does not exist', function () {
     $response = $this->get('/projects/999999');
 
     $response->assertNotFound();

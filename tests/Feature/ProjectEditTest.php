@@ -1,71 +1,81 @@
 <?php
 
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-it('displays the edit form for a project', function () {
+it('displays the project edit form with its current data', function () {
+    $user = User::factory()->create();
+
     $project = Project::create([
-        'name' => 'Proxecto para editar',
-        'description' => 'Descrición inicial.',
+        'name' => 'Proxecto orixinal',
+        'description' => 'Descrición orixinal.',
     ]);
 
-    $response = $this->get(route('projects.edit', $project));
+    $response = $this->actingAs($user)
+        ->get(route('projects.edit', $project));
 
     $response->assertOk()
         ->assertSee('Editar proxecto')
-        ->assertSee('Proxecto para editar')
-        ->assertSee('Descrición inicial.')
+        ->assertSee('Proxecto orixinal')
+        ->assertSee('Descrición orixinal.')
         ->assertSee('Gardar cambios');
 });
 
-it('returns not found when editing a missing project', function () {
-    $response = $this->get('/projects/999999/edit');
+it('updates a project with valid data', function () {
+    $user = User::factory()->create();
 
-    $response->assertNotFound();
-});
-
-it('updates a project', function () {
     $project = Project::create([
-        'name' => 'Nome inicial',
-        'description' => 'Descrición inicial.',
+        'name' => 'Proxecto orixinal',
+        'description' => 'Descrición orixinal.',
     ]);
 
-    $response = $this->put(
-        route('projects.update', $project),
-        [
-            'name' => 'Nome actualizado',
+    $response = $this->actingAs($user)
+        ->put(route('projects.update', $project), [
+            'name' => 'Proxecto actualizado',
             'description' => 'Descrición actualizada.',
-        ]
-    );
+        ]);
 
-    $project->refresh();
+    $response->assertRedirect(route('projects.show', $project))
+        ->assertSessionHas('success', 'Proxecto actualizado correctamente.');
 
-    expect($project->name)->toBe('Nome actualizado')
-        ->and($project->description)->toBe('Descrición actualizada.');
-
-    $response->assertRedirect(route('projects.show', $project));
+    $this->assertDatabaseHas('projects', [
+        'id' => $project->id,
+        'name' => 'Proxecto actualizado',
+        'description' => 'Descrición actualizada.',
+    ]);
 });
 
-it('requires a project name when updating', function () {
+it('does not update a project without a name', function () {
+    $user = User::factory()->create();
+
     $project = Project::create([
-        'name' => 'Proxecto existente',
-        'description' => 'Descrición existente.',
+        'name' => 'Proxecto orixinal',
+        'description' => 'Descrición orixinal.',
     ]);
 
-    $response = $this->put(
-        route('projects.update', $project),
-        [
+    $response = $this->actingAs($user)
+        ->put(route('projects.update', $project), [
             'name' => '',
-            'description' => 'Nova descrición.',
-        ]
-    );
+            'description' => 'Descrición modificada.',
+        ]);
 
     $response->assertSessionHasErrors('name');
 
-    $project->refresh();
+    $this->assertDatabaseHas('projects', [
+        'id' => $project->id,
+        'name' => 'Proxecto orixinal',
+        'description' => 'Descrición orixinal.',
+    ]);
+});
 
-    expect($project->name)->toBe('Proxecto existente')
-        ->and($project->description)->toBe('Descrición existente.');
+it('returns not found when editing a project that does not exist', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)
+        ->get('/projects/999999/edit');
+
+    $response->assertNotFound();
 });

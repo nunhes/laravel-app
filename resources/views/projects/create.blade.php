@@ -9,12 +9,13 @@
         @csrf
 
         <div>
-            <label for="name">Nome</label>
+            <label for="name" class="form-label">Nome</label>
             <input
                 type="text"
                 id="name"
                 name="name"
                 value="{{ old('name') }}"
+                class="form-input"
                 required
             >
         </div>
@@ -25,6 +26,7 @@
                 id="description"
                 name="description"
                 rows="5"
+                class="form-textarea"
             >{{ old('description') }}</textarea>
         </div>
 

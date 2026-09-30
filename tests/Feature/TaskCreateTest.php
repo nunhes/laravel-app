@@ -2,16 +2,19 @@
 
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
 it('creates a task for a project', function () {
+    $user = User::factory()->create();
+
     $project = Project::create([
         'name' => 'Proxecto de tarefas',
     ]);
 
-    $response = $this->post(
+    $response = $this->actingAs($user)->post(
         route('projects.tasks.store', $project),
         [
             'title' => 'Implementar formulario',
@@ -37,11 +40,13 @@ it('creates a task for a project', function () {
 });
 
 it('validates task fields', function () {
+    $user = User::factory()->create();
+
     $project = Project::create([
         'name' => 'Proxecto de validación',
     ]);
 
-    $response = $this->post(
+    $response = $this->actingAs($user)->post(
         route('projects.tasks.store', $project),
         [
             'title' => '',

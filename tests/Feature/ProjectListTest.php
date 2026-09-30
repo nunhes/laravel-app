@@ -31,6 +31,6 @@ it('displays existing projects with their task count', function () {
 
     $response->assertOk()
         ->assertSee('Proxecto de exemplo')
-        ->assertSee('2 tarefas')
+        ->assertSeeText('2 tarefas')
         ->assertSee('Un proxecto para probar o listado.');
 });

@@ -2,11 +2,14 @@
 
 use App\Models\Project;
 use App\Models\Task;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
 it('displays the edit form for a task', function () {
+    $user = User::factory()->create();
+
     $project = Project::create([
         'name' => 'Proxecto das tarefas',
     ]);
@@ -19,7 +22,7 @@ it('displays the edit form for a task', function () {
         'due_date' => '2026-10-10',
     ]);
 
-    $response = $this->get(
+    $response = $this->actingAs($user)->get(
         route('projects.tasks.edit', [$project, $task])
     );
 
@@ -31,6 +34,8 @@ it('displays the edit form for a task', function () {
 });
 
 it('updates a task', function () {
+    $user = User::factory()->create();
+
     $project = Project::create([
         'name' => 'Proxecto de actualización',
     ]);
@@ -43,7 +48,7 @@ it('updates a task', function () {
         'due_date' => '2026-10-10',
     ]);
 
-    $response = $this->put(
+    $response = $this->actingAs($user)->put(
         route('projects.tasks.update', [$project, $task]),
         [
             'title' => 'Título actualizado',
@@ -68,6 +73,8 @@ it('updates a task', function () {
 });
 
 it('validates task fields when updating', function () {
+    $user = User::factory()->create();
+
     $project = Project::create([
         'name' => 'Proxecto de validación',
     ]);
@@ -80,7 +87,7 @@ it('validates task fields when updating', function () {
         'due_date' => '2026-10-10',
     ]);
 
-    $response = $this->put(
+    $response = $this->actingAs($user)->put(
         route('projects.tasks.update', [$project, $task]),
         [
             'title' => '',

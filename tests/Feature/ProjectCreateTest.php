@@ -1,32 +1,53 @@
 <?php
 
 use App\Models\Project;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-it('creates a project', function () {
-    $response = $this->post(route('projects.store'), [
-        'name' => 'Novo proxecto',
-        'description' => 'Descrición do proxecto.',
-    ]);
+it('displays the project creation form', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)
+        ->get('/projects/create');
+
+    $response->assertOk()
+        ->assertSee('Crear proxecto');
+});
+
+it('creates a project with valid data', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)
+        ->post('/projects', [
+            'name' => 'Novo proxecto',
+            'description' => 'Descrición do novo proxecto.',
+        ]);
 
     $project = Project::where('name', 'Novo proxecto')->first();
 
-    expect($project)->not->toBeNull()
-        ->and($project->description)->toBe('Descrición do proxecto.');
+    $response->assertRedirect(route('projects.show', $project))
+        ->assertSessionHas('success', 'Proxecto creado correctamente.');
 
-    $response->assertRedirect(route('projects.show', $project));
+    $this->assertDatabaseHas('projects', [
+        'name' => 'Novo proxecto',
+        'description' => 'Descrición do novo proxecto.',
+    ]);
 });
 
-it('requires a project name', function () {
-    $response = $this->post(route('projects.store'), [
-        'name' => '',
-        'description' => 'Proxecto sen nome.',
-    ]);
+it('does not create a project without a name', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)
+        ->post('/projects', [
+            'name' => '',
+            'description' => 'Descrición sen nome.',
+        ]);
 
     $response->assertSessionHasErrors('name');
 
-    expect(Project::where('description', 'Proxecto sen nome.')->exists())
-        ->toBeFalse();
+    $this->assertDatabaseMissing('projects', [
+        'description' => 'Descrición sen nome.',
+    ]);
 });
