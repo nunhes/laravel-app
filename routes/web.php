@@ -27,8 +27,8 @@ Route::resource('projects', ProjectController::class)
     ->only(['index', 'show']);
 
 //Route::resource('projects.tasks', TaskController::class)
-  //  ->except(['show'])
-   // ->scoped();
+//  ->except(['show'])
+// ->scoped();
 
 Route::resource('projects.tasks', TaskController::class)
     ->only(['index'])
