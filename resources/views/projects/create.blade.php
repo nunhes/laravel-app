@@ -15,8 +15,8 @@
                 id="name"
                 name="name"
                 value="{{ old('name') }}"
-                class="form-input"
                 required
+                class="form-input border border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
             >
         </div>
 
@@ -26,14 +26,14 @@
                 id="description"
                 name="description"
                 rows="5"
-                class="form-textarea"
+                class="form-textarea border border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
             >{{ old('description') }}</textarea>
         </div>
 
-        <button type="submit">Crear proxecto</button>
+        <button class="bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50" type="submit">Crear proxecto</button>
     </form>
 
     <p>
-        <a href="{{ route('projects.index') }}">Volver aos proxectos</a>
+        <a href="{{ route('projects.index') }}" class="px-6 py-2 text-xs font-medium leading-6 text-center text-white uppercase transition bg-blue-700 rounded-full shadow ripple hover:shadow-lg hover:bg-blue-800 focus:outline-none">Volver aos proxectos</a>
     </p>
 @endsection

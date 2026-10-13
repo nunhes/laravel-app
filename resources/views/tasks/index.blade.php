@@ -4,7 +4,7 @@
 
 @section('content')
     <p>
-        <a href="{{ route('projects.show', $project) }}">
+        <a href="{{ route('projects.show', $project) }}" class="px-6 py-2 text-xs font-medium leading-6 text-center text-white uppercase transition bg-blue-700 rounded-full shadow ripple hover:shadow-lg hover:bg-blue-800 focus:outline-none">
             ← Volver ao proxecto
         </a>
     </p>
@@ -96,7 +96,7 @@
                             @csrf
                             @method('DELETE')
 
-                            <button type="submit">Eliminar</button>
+                            <button class="bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50" type="submit">Eliminar</button>
                         </form>
                     </div>
                 </li>
