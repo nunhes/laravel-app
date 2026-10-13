@@ -51,5 +51,20 @@
                 Iniciar sesión
             </button>
         </form>
+<!-- recuperar contrasinal -->
+        <p class="mt-5 text-sm text-gray-600 dark:text-gray-300">
+    <a href="{{ route('password.request') }}"
+       class="underline hover:no-underline">
+        Esqueciches o contrasinal?
+    </a>
+</p>
+<!-- //mensaxe de exito -->
+@if (session('status'))
+    <div class="mt-4 text-sm text-green-700 dark:text-green-300"
+         role="status">
+        {{ session('status') }}
+    </div>
+@endif
+
     </div>
 @endsection
